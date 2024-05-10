@@ -1,5 +1,5 @@
 // import React from 'react'
-import { useSelector } from "react-redux"
+import { useSelector } from "react-redux";
 import { Alert, Button, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -76,7 +76,7 @@ function DashProfile() {
           className="hidden"
         />
         <div
-          className="w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
+          className="relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
           onClick={() => filePickerRef.current.click()}
         >
           {imageFileUploadProgress && (
