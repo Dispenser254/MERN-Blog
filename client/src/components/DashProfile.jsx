@@ -18,6 +18,7 @@ import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signoutSuccess,
   updateFailure,
   updateStart,
   updateSuccess,
@@ -123,21 +124,37 @@ function DashProfile() {
     }
   };
 
-  const handleDeleteUser = async() => {
-    setShowModal(false)
+  const handleDeleteUser = async () => {
+    setShowModal(false);
     try {
-      dispatch(deleteUserStart())
+      dispatch(deleteUserStart());
       const response = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: 'DELETE'
-      })
-      const data = await response.json()
+        method: "DELETE",
+      });
+      const data = await response.json();
       if (!response.ok) {
-        dispatch(deleteUserFailure(data.message))
-      }else{
-        dispatch(deleteUserSuccess(data))
+        dispatch(deleteUserFailure(data.message));
+      } else {
+        dispatch(deleteUserSuccess(data));
       }
     } catch (error) {
-      dispatch(deleteUserFailure(error.message))
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
+
+  const handleSignout = async () => {
+    try {
+      const response = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        console.log(data.messsage);
+      } else {
+        dispatch(signoutSuccess());
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -226,7 +243,9 @@ function DashProfile() {
         <span onClick={() => setShowModal(true)} className="cursor-pointer">
           Delete Account
         </span>
-        <span className="cursor-pointer">Sign Out</span>
+        <span onClick={handleSignout} className="cursor-pointer">
+          Sign Out
+        </span>
       </div>
       {updateUserSuccess && (
         <Alert color="success" className="mt-5">
