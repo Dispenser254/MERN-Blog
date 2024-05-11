@@ -2,6 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 // import React from 'react'
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { Alert, Button, Modal, TextInput } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useEffect, useRef, useState } from "react";
@@ -25,7 +26,7 @@ import {
 } from "../redux/user/userSlice";
 
 function DashProfile() {
-  const { currentUser, error } = useSelector((state) => state.user);
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
@@ -234,9 +235,19 @@ function DashProfile() {
           />
         </div>
 
-        <Button type="submit" gradientDuoTone="purpleToBlue" outline>
-          Update
+        <Button type="submit" gradientDuoTone="purpleToBlue" outline disabled={loading || imageFileUploading}>
+          {loading ? 'Loading...' : 'Update'}
         </Button>
+
+        {currentUser.isAdmin && (
+          <Link to={'/create-post'}>
+            <Button
+              type="button"
+              gradientDuoTone="purpleToPink"
+              className="w-full"
+            >Create a post</Button>
+          </Link>
+        )}
       </form>
 
       <div className="text-red-500 flex justify-between mt-5">
