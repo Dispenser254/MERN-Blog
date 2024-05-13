@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const flowbite = require("flowbite-react/tailwind");
 
 /** @type {import('tailwindcss').Config} */
@@ -6,5 +7,5 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [flowbite.plugin()],
+  plugins: [flowbite.plugin(), require("tailwind-scrollbar")],
 };

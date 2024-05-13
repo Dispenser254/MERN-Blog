@@ -1,54 +1,54 @@
 /* eslint-disable no-unused-vars */
-// import React from 'react'
-
+import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
-import { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { app } from "../firebase";
+import { useEffect, useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-function UpdatePost() {
+export default function UpdatePost() {
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
-  const navigate = useNavigate();
   const { postId } = useParams();
+
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     try {
       const fetchPost = async () => {
-        const response = await fetch(`/api/post/getposts?postId=${postId}`);
-
-        const data = await response.json();
-        if (!response.ok) {
+        const res = await fetch(`/api/post/getposts?postId=${postId}`);
+        const data = await res.json();
+        if (!res.ok) {
           console.log(data.message);
           setPublishError(data.message);
           return;
-        } else {
+        }
+        if (res.ok) {
           setPublishError(null);
-          setFormData();
+          setFormData(data.posts[0]);
         }
       };
+
       fetchPost();
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   }, [postId]);
 
-  const handleUploadImage = async () => {
+  const handleUpdloadImage = async () => {
     try {
       if (!file) {
         setImageUploadError("Please select an image");
@@ -71,34 +71,39 @@ function UpdatePost() {
           setImageUploadProgress(null);
         },
         () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setImageUploadProgress(null);
             setImageUploadError(null);
-            setFormData({ ...formData, image: downloadUrl });
+            setFormData({ ...formData, image: downloadURL });
           });
         }
       );
     } catch (error) {
       setImageUploadError("Image upload failed");
       setImageUploadProgress(null);
+      console.log(error);
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
+      const res = await fetch(
         `/api/post/updatepost/${formData._id}/${currentUser._id}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify(formData),
         }
       );
-      const data = await response.json();
-      if (!response.ok) {
+      const data = await res.json();
+      if (!res.ok) {
         setPublishError(data.message);
-      } else {
+        return;
+      }
+
+      if (res.ok) {
         setPublishError(null);
         navigate(`/post/${data.slug}`);
       }
@@ -108,11 +113,8 @@ function UpdatePost() {
   };
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
-      <h1 className="text-center text-3xl my-7 font-semibold">Update Post</h1>
-      <form
-        className="flex flex-col gap-4 sm:flex-row justify-between"
-        onSubmit={handleSubmit}
-      >
+      <h1 className="text-center text-3xl my-7 font-semibold">Update post</h1>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
             type="text"
@@ -131,8 +133,8 @@ function UpdatePost() {
             }
             value={formData.category}
           >
-            <option value="uncategorised">Select a category</option>
-            <option value="javascript">Javascript</option>
+            <option value="uncategorized">Select a category</option>
+            <option value="javascript">JavaScript</option>
             <option value="reactjs">React.js</option>
             <option value="nextjs">Next.js</option>
           </Select>
@@ -148,18 +150,18 @@ function UpdatePost() {
             gradientDuoTone="purpleToBlue"
             size="sm"
             outline
-            onClick={handleUploadImage}
+            onClick={handleUpdloadImage}
             disabled={imageUploadProgress}
           >
             {imageUploadProgress ? (
               <div className="w-16 h-16">
                 <CircularProgressbar
                   value={imageUploadProgress}
-                  text={`${imageUploadProgress}` || 0}
+                  text={`${imageUploadProgress || 0}%`}
                 />
               </div>
             ) : (
-              "Upload image"
+              "Upload Image"
             )}
           </Button>
         </div>
@@ -173,19 +175,19 @@ function UpdatePost() {
         )}
         <ReactQuill
           theme="snow"
+          value={formData.content}
           placeholder="Write something..."
-          className="h-72 mb-12 "
+          className="h-72 mb-12"
           required
           onChange={(value) => {
             setFormData({ ...formData, content: value });
           }}
-          value={formData.content}
         />
         <Button type="submit" gradientDuoTone="purpleToPink">
-          Update
+          Update post
         </Button>
         {publishError && (
-          <Alert color="failure" className="mt-5">
+          <Alert className="mt-5" color="failure">
             {publishError}
           </Alert>
         )}
@@ -193,5 +195,3 @@ function UpdatePost() {
     </div>
   );
 }
-
-export default UpdatePost;

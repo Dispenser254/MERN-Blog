@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import userRoutes from "../api/routes/user.route.js";
 import authRoutes from "../api/routes/auth.route.js";
 import cookieParser from "cookie-parser";
-import postRoutes from "./routes/post.route.js";
+import postRoutes from "../api/routes/post.route.js";
 
 dotenv.config();
 

@@ -17,7 +17,8 @@ const postSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default: "",
+      default:
+        "https://imgs.search.brave.com/D3P9kmVOul8s_yOZzI_B84pb5vvX6JCy39F9XMkYu6E/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/cnlyb2IuY29tL3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDIyLzAy/L2lTdG9jay0xMjc5/MTI4MDc0LmpwZw",
     },
     category: {
       type: String,
