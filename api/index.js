@@ -5,6 +5,7 @@ import userRoutes from "../api/routes/user.route.js";
 import authRoutes from "../api/routes/auth.route.js";
 import cookieParser from "cookie-parser";
 import postRoutes from "../api/routes/post.route.js";
+import commentRoutes from "../api/routes/comment.route.js";
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ mongoose
 
 const app = express();
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
 
 const PORT = process.env.PORT;
 
@@ -30,6 +31,7 @@ app.listen(PORT, () => {
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
+app.use("/api/comment", commentRoutes);
 
 app.use((error, request, response, next) => {
   const statusCode = error.statusCode || 500;
