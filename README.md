@@ -4,9 +4,14 @@ This repository contains a blog application built using the MERN stack (MongoDB,
 
 ## Features
 
-- **User Authentication**: Users can register and log in to their accounts.
-- **Post Management**: Users can create, read, update, and delete blog posts.
-- **Responsive Design**: The application is designed to be responsive and user-friendly.
+- User Authentication: Secure user authentication system with JWT (JSON Web Tokens) for user login and registration.
+- Create and Edit Posts: Users can create, edit, and delete blog posts with ease.
+- Rich Text Editing: Support for rich text editing using popular libraries like Draft.js or Quill.
+- Commenting System: Engage with readers through a built-in commenting system for each blog post.
+- Responsive Design: Responsive and mobile-friendly design ensures optimal user experience across devices.
+- Search Functionality: Search functionality to quickly find relevant blog posts based on keywords.
+- Admin Panel: Admin dashboard for managing users, posts, comments, and other site settings.
+- RESTful API: RESTful API endpoints for seamless integration with front-end applications.
 
 ## Installation
 
@@ -14,6 +19,10 @@ This repository contains a blog application built using the MERN stack (MongoDB,
 
 - Node.js
 - MongoDB
+- React.js
+- Express.js
+- Tailwind CSS
+- Flowbite
 
 ### Backend Setup
 
@@ -52,7 +61,12 @@ This repository contains a blog application built using the MERN stack (MongoDB,
    npm install
    ```
 
-3. Start the frontend server:
+3. Create a `.env` file and add the following environment variables:
+   ```
+   VITE_FIREBASE_API_KEY=firebase_api_key
+   ```
+
+4. Start the frontend server:
    ```bash
    npm run dev
    ```
